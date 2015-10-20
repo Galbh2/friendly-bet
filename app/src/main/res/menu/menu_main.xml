@@ -1,0 +1,27 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" >
+
+
+        <item
+            android:id="@+id/settingsButton"
+            android:orderInCategory="2"
+            android:title="Settings"
+            android:icon="@mipmap/ic_build_white_24dp"
+            app:showAsAction="never"/>
+        <item
+            android:id="@+id/aboutButton"
+            android:orderInCategory="3"
+            android:title="About"
+            android:icon="@mipmap/ic_info_white_24dp"
+            app:showAsAction="never"
+            />
+
+        <item
+            android:id="@+id/refreshButton"
+            android:orderInCategory="1"
+            android:title="Refresh"
+            android:icon="@mipmap/ic_autorenew_white_24dp"
+            app:showAsAction="always"
+        />
+
+</menu>

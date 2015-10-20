@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">FriendlyBet</string>
+
+    <string name="hello_world">Hello world My Friend!</string>
+    <string name="action_settings">Settings</string>
+    <string name="friendlyBet">Friendly Bet</string>
+    <string name="timeToBet">Time To Bet</string>
+    <string name="defaultContentServer">http://www.mocky.io/v2/55c744d80c3c403105030309</string>
+    <string name="defaultDeliveryServer">192.168.1.100</string>
+    <string name="defaultDeliveryServerPort">8080</string>
+    <string name="aboutMsg">FriendlyBet Ver. 1.0</string>
+</resources>
