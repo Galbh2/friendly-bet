@@ -46,13 +46,13 @@ public class BetsAdapter extends RecyclerView.Adapter <BetsAdapter.MyViewHolder>
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
-        Log.d("position", String.valueOf(position));
-
         Game game = gamesList.getGame(position);
         holder.teamAText.setText(game.getTeamA());
         holder.teamBText.setText((game.getTeamB()));
         holder.teamAImg.setImageResource(game.getTeamAIcon());
         holder.teamBImg.setImageResource(game.getTeamBIcon());
+        holder.teamAScore.setText(String.valueOf(game.getTeamAScore()));
+        holder.teamBScore.setText(String.valueOf(game.getTeamBScore()));
         holder.date.setText(game.getDate());
 
     }
@@ -60,6 +60,13 @@ public class BetsAdapter extends RecyclerView.Adapter <BetsAdapter.MyViewHolder>
     @Override
     public int getItemCount() {
         return gamesList.getSize();
+    }
+
+    public void updateItem (int index) {
+
+        notifyItemChanged(index);
+        Log.d("teamAScore: ", String.valueOf(gamesList.getGame(index).getTeamAScore()));
+
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
@@ -79,10 +86,6 @@ public class BetsAdapter extends RecyclerView.Adapter <BetsAdapter.MyViewHolder>
             date = (EditText) itemView.findViewById(R.id.game_date);
             teamAScore = (TextView) itemView.findViewById(R.id.team_a_score);
             teamBScore = (TextView) itemView.findViewById(R.id.team_b_score);
-
-
-
-
 
             final GestureDetectorCompat mDetectorA = new GestureDetectorCompat(context, new MyGestureLisnter(teamAScore));
 
@@ -115,11 +118,9 @@ public class BetsAdapter extends RecyclerView.Adapter <BetsAdapter.MyViewHolder>
 
         class MyGestureLisnter extends GestureDetector.SimpleOnGestureListener {
 
-            int score;
             TextView textView;
 
             MyGestureLisnter(TextView text){
-                score = Integer.parseInt(text.getText().toString());
                 textView = text;
             }
 
@@ -156,11 +157,37 @@ public class BetsAdapter extends RecyclerView.Adapter <BetsAdapter.MyViewHolder>
             @Override
             public boolean onDoubleTap(MotionEvent e) {
 
-                if (score > 0) {
-                    score--;
-                }
+                int index = getAdapterPosition();
+                Log.d("clicked at position D", String.valueOf(index));
 
-                textView.setText(String.valueOf(score));
+                if (index != -1) {
+                    Game currentGame = gamesList.getGame(index);
+                    int score;
+                    boolean isTeamA = false;
+
+                    if (textView.getId() == R.id.team_a_score) {
+
+                        score = currentGame.getTeamAScore();
+                        isTeamA = true;
+
+                    } else {
+
+                        score = currentGame.getTeamBScore();
+
+                    }
+
+                    if (score > 0) {
+                        score--;
+                    }
+
+                    if (isTeamA) {
+                        currentGame.setTeamAScore(score);
+                    } else {
+                        currentGame.setTeamBScore(score);
+                    }
+
+                    updateItem(index);
+                }
 
                 return true;
             }
@@ -168,14 +195,42 @@ public class BetsAdapter extends RecyclerView.Adapter <BetsAdapter.MyViewHolder>
             @Override
             public boolean onSingleTapConfirmed(MotionEvent e) {
 
-                if(score < 15){
-                    score++;
-                }
+                int index = getAdapterPosition();
+                Log.d("clicked at position ", String.valueOf(index));
 
-                textView.setText(String.valueOf(score));
+                if (index != -1) {
+                    Game currentGame = gamesList.getGame(index);
+                    int score;
+                    boolean isTeamA = false;
+
+                    if (textView.getId() == R.id.team_a_score) {
+
+                        score = currentGame.getTeamAScore();
+                        isTeamA = true;
+
+                    } else {
+
+                        score = currentGame.getTeamBScore();
+
+                    }
+
+                    if (score < 15) {
+                        score++;
+                    }
+
+                    if (isTeamA) {
+                        currentGame.setTeamAScore(score);
+                    } else {
+                        currentGame.setTeamBScore(score);
+                    }
+
+                    updateItem(index);
+                }
 
                 return true;
             }
+
+
         }
     }
 
