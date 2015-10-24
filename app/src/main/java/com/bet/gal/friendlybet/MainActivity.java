@@ -66,8 +66,6 @@ public class MainActivity extends Activity {
 
         scrollView.addView(layout);
 
-        loadSettings();
-
         //Loads the games from the content server
         refresh();
     }
@@ -134,7 +132,7 @@ public class MainActivity extends Activity {
         if (data.getBooleanExtra("needsRefresh", false) == true) {
 
             Log.d("refresh", "gal refresh called");
-            loadSettings();
+
             Log.d("mockAdress", mockAddress);
             refresh();
         }
@@ -175,76 +173,6 @@ public class MainActivity extends Activity {
     }
 
 
-    public class MyTask extends AsyncTask<String, Integer, String> {
-
-        ProgressDialog dialog;
-
-        @Override
-        protected void onPreExecute() {
-
-            dialog = ProgressDialog.show(MainActivity.this, "FriendlyBet", "Loading...");
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-
-            StringBuilder s = new StringBuilder();
-
-            try {
-
-                URL url = new URL(params[0]);
-                URLConnection connection = url.openConnection();
-
-                HttpURLConnection httpConnection = (HttpURLConnection) connection;
-
-                httpConnection.connect();
-
-                int responseCode = httpConnection.getResponseCode();
-
-                if (responseCode == HttpURLConnection.HTTP_OK) {
-
-                    InputStreamReader is = new InputStreamReader(httpConnection.getInputStream());
-                    BufferedReader br = new BufferedReader(is);
-                    String line;
-                    line = br.readLine();
-
-                    while ((line != null)) {
-
-                        s.append(line);
-                        line = br.readLine();
-                    }
-                } else {
-                    Log.d("request status: ", Integer.toString(responseCode));
-                }
-
-
-            } catch (Exception e) {
-
-                Log.d("Request exception: ", e.getMessage());
-
-            }
-
-            return s.toString();
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            Log.d("post", "postExecute");
-            try {
-                gamesList = mapper.readValue(s, GamesList.class);
-            } catch (IOException e) {
-                Log.d("Parsing error ", e.getMessage());
-                clearLayout();
-            }
-
-            if (gamesList != null) {
-                populateLayout();
-            }
-
-            dialog.dismiss();
-
-        }
-    }
 
     private class SendButtonLister implements View.OnClickListener {
 
@@ -312,17 +240,7 @@ public class MainActivity extends Activity {
         }
     }
 
-    private void loadSettings() {
 
-        Log.d("loadSettings", "activate");
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-
-        mockAddress = sp.getString("CONTENT_SERVER_ADDRESS", getString(R.string.defaultContentServer));
-        serverAddress = sp.getString("DELIVERY_SERVER_ADDRESS", getString(R.string.defaultDeliveryServer));
-        serverPort = Integer.parseInt(sp.getString("DELIVERY_SERVER_PORT", getString(R.string.defaultDeliveryServerPort)));
-
-
-    }
 
     private void clearLayout() {
         Log.d("remove views", "true");
@@ -339,7 +257,7 @@ public class MainActivity extends Activity {
         DateFormat f = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss");
         dateText.setText(f.format(new Date()));
 
-        new MyTask().execute(mockAddress);
+        //new MyTask().execute(mockAddress);
 
 
     }

@@ -26,11 +26,11 @@ public class BetsAdapter extends RecyclerView.Adapter <BetsAdapter.MyViewHolder>
     private GamesList gamesList;
     private Context context;
 
-    public BetsAdapter (Context context, Game[] games) {
+    public BetsAdapter (Context context, GamesList list) {
 
         context = context;
         inflater = LayoutInflater.from(context);
-        gamesList = new GamesList(games);
+        gamesList = list;
 
     }
 
@@ -64,7 +64,7 @@ public class BetsAdapter extends RecyclerView.Adapter <BetsAdapter.MyViewHolder>
 
     public void updateItem (int index) {
 
-        notifyItemChanged(index);
+       // notifyItemChanged(index);
         Log.d("teamAScore: ", String.valueOf(gamesList.getGame(index).getTeamAScore()));
 
     }
@@ -182,8 +182,10 @@ public class BetsAdapter extends RecyclerView.Adapter <BetsAdapter.MyViewHolder>
 
                     if (isTeamA) {
                         currentGame.setTeamAScore(score);
+                        teamAScore.setText(String.valueOf(score));
                     } else {
                         currentGame.setTeamBScore(score);
+                        teamBScore.setText(String.valueOf(score));
                     }
 
                     updateItem(index);
@@ -220,8 +222,10 @@ public class BetsAdapter extends RecyclerView.Adapter <BetsAdapter.MyViewHolder>
 
                     if (isTeamA) {
                         currentGame.setTeamAScore(score);
+                        teamAScore.setText(String.valueOf(score));
                     } else {
                         currentGame.setTeamBScore(score);
+                        teamBScore.setText(String.valueOf(score));
                     }
 
                     updateItem(index);
